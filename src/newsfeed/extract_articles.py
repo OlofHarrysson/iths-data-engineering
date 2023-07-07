@@ -18,7 +18,7 @@ def load_metadata(blog_name: str) -> BeautifulSoup:
     return parsed_xml
 
 
-def extract_articles(parsed_xml: BeautifulSoup) -> list[BlogInfo]:
+def extract_articles_from_xml(parsed_xml: BeautifulSoup) -> list[BlogInfo]:
     articles = []
     for item in parsed_xml.find_all("item"):
         raw_blog_text = item.find("content:encoded").text
@@ -48,7 +48,7 @@ def save_articles(articles: list[BlogInfo], blog_name: str) -> None:
 def main(blog_name: str) -> None:
     logger.info(f"Processing {blog_name}")
     parsed_xml = load_metadata(blog_name)
-    articles = extract_articles(parsed_xml)
+    articles = extract_articles_from_xml(parsed_xml)
     save_articles(articles, blog_name)
     logger.info(f"Done processing {blog_name}")
 

@@ -1,6 +1,8 @@
 # type: ignore
 import psycopg2
 
+TABLE_NAME = "iths.articles"
+
 
 def create_connection():
     # Establish a connection to the PostgreSQL database
@@ -17,28 +19,61 @@ def create_connection():
     return connection, cursor
 
 
-def main() -> None:
+def create_articles_table():
     connection, cursor = create_connection()
 
     # Execute SQL queries to create a table
-    table_name = "iths.articles"
     create_table_query = f"""
-        CREATE TABLE IF NOT EXISTS "{table_name}" (
+        CREATE TABLE IF NOT EXISTS "{TABLE_NAME}" (
             id SERIAL PRIMARY KEY,
-            title VARCHAR(100),
-            content TEXT
+            title TEXT,
+            description TEXT,
+            link TEXT,
+            published DATE,
+            blog_text TEXT
         )
     """
     cursor.execute(create_table_query)
     connection.commit()
 
-    # Insert example data into the table
-    insert_data_query = f"""
-        INSERT INTO "{table_name}" (title)
-        VALUES ('John'), ('Jane'), ('Alice')
-    """
-    cursor.execute(insert_data_query)
+    # Close the cursor and connection
+    cursor.close()
+    connection.close()
+
+
+def delete_articles_table():
+    connection, cursor = create_connection()
+
+    # Execute SQL query to drop the table
+    drop_table_query = f'DROP TABLE IF EXISTS "{TABLE_NAME}"'
+    cursor.execute(drop_table_query)
     connection.commit()
+
+    # Close the cursor and connection
+    cursor.close()
+    connection.close()
+
+
+def add_article(articles):
+    connection, cursor = create_connection()
+
+    # Execute SQL query to insert the article into the table
+    insert_query = f"""
+        INSERT INTO  "{TABLE_NAME}" (title, description, link, published, blog_text)
+        VALUES (%s, %s, %s, %s, %s)
+    """
+    for article in articles:
+        cursor.execute(
+            insert_query,
+            (
+                article.title,
+                article.description,
+                article.link,
+                article.published,
+                article.blog_text,
+            ),
+        )
+        connection.commit()
 
     # Close the cursor and connection
     cursor.close()
@@ -65,11 +100,11 @@ def check_tables():
     connection.close()
 
 
-def print_first_10_rows():
+def print_first_rows():
     connection, cursor = create_connection()
 
     # Execute the query to fetch the first 10 rows from iths.articles
-    cursor.execute('SELECT * FROM "iths.articles" LIMIT 10')
+    cursor.execute('SELECT * FROM "iths.articles" LIMIT 3')
 
     # Fetch all the rows
     rows = cursor.fetchall()
@@ -106,7 +141,7 @@ def print_column_information():
 
 
 if __name__ == "__main__":
-    main()
+    # delete_articles_table()
     check_tables()
-    print_first_10_rows()
+    print_first_rows()
     print_column_information()
