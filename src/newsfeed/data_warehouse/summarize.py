@@ -1,23 +1,16 @@
+import dotenv
 import jsonargparse
 from loguru import logger
 
-from newsfeed import extract_articles, log_utils
+from newsfeed import log_utils, summarize
 from newsfeed.data_warehouse import database_utils
-from newsfeed.datatypes import BlogInfo, BlogSummary
 
 
 def main(blog_name: str) -> None:
     logger.info(f"Processing {blog_name}")
-    parsed_xml = extract_articles.load_metadata(blog_name)
-    articles = extract_articles.extract_articles_from_xml(parsed_xml)
-    save_articles_data_warehouse(articles)
+    articles = database_utils.load_articles()
+    summarize.create_summaries(articles, summary_type="default")
     logger.info(f"Done processing {blog_name}")
-
-
-def save_articles_data_warehouse(articles: list[BlogInfo]) -> None:
-    database_utils.delete_articles_table()
-    database_utils.create_articles_table()
-    database_utils.add_articles(articles)
 
 
 def parse_args() -> jsonargparse.Namespace:
@@ -27,6 +20,7 @@ def parse_args() -> jsonargparse.Namespace:
 
 
 if __name__ == "__main__":
+    dotenv.load_dotenv("cfg/dev.env")
     args = parse_args()
     log_utils.configure_logger(log_level="DEBUG")
     main(**args)

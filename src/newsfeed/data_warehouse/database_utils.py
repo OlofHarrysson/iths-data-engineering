@@ -1,10 +1,12 @@
-# type: ignore
+import pandas as pd
 import psycopg2
+
+from newsfeed.datatypes import BlogInfo
 
 TABLE_NAME = "iths.articles"
 
 
-def create_connection():
+def create_connection() -> tuple[psycopg2.extensions.connection, psycopg2.extensions.cursor]:
     # Establish a connection to the PostgreSQL database
     connection = psycopg2.connect(
         host="localhost",
@@ -19,7 +21,7 @@ def create_connection():
     return connection, cursor
 
 
-def create_articles_table():
+def create_articles_table() -> None:
     connection, cursor = create_connection()
 
     # Execute SQL queries to create a table
@@ -41,7 +43,7 @@ def create_articles_table():
     connection.close()
 
 
-def delete_articles_table():
+def delete_articles_table() -> None:
     connection, cursor = create_connection()
 
     # Execute SQL query to drop the table
@@ -54,7 +56,7 @@ def delete_articles_table():
     connection.close()
 
 
-def add_article(articles):
+def add_articles(articles: list[BlogInfo]) -> None:
     connection, cursor = create_connection()
 
     # Execute SQL query to insert the article into the table
@@ -80,60 +82,64 @@ def add_article(articles):
     connection.close()
 
 
-def check_tables():
+def load_articles() -> list[BlogInfo]:
     connection, cursor = create_connection()
 
-    # Execute the query to get a list of tables starting with 'iths.'
+    # Execute SQL query to fetch articles from the table
+    select_query = f'SELECT * FROM "{TABLE_NAME}"'
+    cursor.execute(select_query)
+    rows = cursor.fetchall()
+
+    # Create a list of BlogInfo instances from the fetched rows
+    articles = []
+    for row in rows:
+        article = BlogInfo(
+            title=row[1],
+            description=row[2],
+            link=row[3],
+            published=pd.to_datetime(row[4]).date(),
+            blog_text=row[5],
+        )
+        articles.append(article)
+
+    # Close the cursor and connection
+    cursor.close()
+    connection.close()
+
+    return articles
+
+
+def debug_database() -> None:
+    connection, cursor = create_connection()
+
+    # Check tables
     cursor.execute(
         "SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'iths.%'"
     )
-
-    # Fetch all the table names
     tables = cursor.fetchall()
-
-    # Print the table names
+    print("Tables:")
     for table in tables:
         print(table[0])
+    print("")
 
-    # Close the cursor and connection
-    cursor.close()
-    connection.close()
-
-
-def print_first_rows():
-    connection, cursor = create_connection()
-
-    # Execute the query to fetch the first 10 rows from iths.articles
-    cursor.execute('SELECT * FROM "iths.articles" LIMIT 3')
-
-    # Fetch all the rows
-    rows = cursor.fetchall()
-
-    # Print the rows
-    for row in rows:
-        print(row)
-
-    # Close the cursor and connection
-    cursor.close()
-    connection.close()
-
-
-def print_column_information():
-    connection, cursor = create_connection()
-
-    # Execute the query to get the column information of iths.articles
+    # Print column information
     cursor.execute(
-        "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'iths.articles'"
+        f"SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '{TABLE_NAME}'"
     )
-
-    # Fetch all the column information
     column_info = cursor.fetchall()
-
-    # Print the column information
+    print("Column Information:")
     for column in column_info:
         print("Column Name:", column[0])
         print("Data Type:", column[1])
         print("")
+
+    # Print first rows
+    cursor.execute(f'SELECT * FROM "{TABLE_NAME}" LIMIT 3')
+    rows = cursor.fetchall()
+    print("First Rows:")
+    for row in rows:
+        print(row)
+    print("")
 
     # Close the cursor and connection
     cursor.close()
@@ -142,6 +148,4 @@ def print_column_information():
 
 if __name__ == "__main__":
     # delete_articles_table()
-    check_tables()
-    print_first_rows()
-    print_column_information()
+    debug_database()
