@@ -10,7 +10,7 @@ from newsfeed.datatypes import BlogInfo
 
 
 def load_metadata(blog_name: str) -> BeautifulSoup:
-    metadata_path = Path("data/datasets") / blog_name / "metadata.xml"
+    metadata_path = Path("data/data_lake") / blog_name / "metadata.xml"
     with open(metadata_path) as f:
         xml_text = f.read()
 
@@ -37,7 +37,7 @@ def extract_articles_from_xml(parsed_xml: BeautifulSoup) -> list[BlogInfo]:
 
 
 def save_articles(articles: list[BlogInfo], blog_name: str) -> None:
-    save_dir = Path("data/datasets", blog_name, "articles")
+    save_dir = Path("data/data_warehouse", blog_name, "articles")
     save_dir.mkdir(exist_ok=True, parents=True)
     for article in articles:
         save_path = save_dir / article.filename

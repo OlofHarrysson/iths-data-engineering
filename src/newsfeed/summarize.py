@@ -31,7 +31,7 @@ PROMPT_TEMPLATES = {
 
 def load_articles(blog_name: str) -> list[BlogInfo]:
     articles = []
-    save_dir = Path("data/datasets", blog_name, "articles")
+    save_dir = Path("data/data_warehouse", blog_name, "articles")
     for article_file in save_dir.glob("**/*.json"):
         article = pydantic.parse_file_as(BlogInfo, article_file)
         # logger.debug(article)
@@ -41,7 +41,7 @@ def load_articles(blog_name: str) -> list[BlogInfo]:
 
 
 def save_summaries(summaries: dict[BlogInfo, BlogSummary], blog_name: str) -> None:
-    save_dir = Path("data/datasets", blog_name, "summaries")
+    save_dir = Path("data/data_warehouse", blog_name, "summaries")
     save_dir.mkdir(exist_ok=True, parents=True)
     for summary in summaries.values():
         save_path = save_dir / summary.filename

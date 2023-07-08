@@ -22,7 +22,7 @@ def get_metadata_info(blog_name: str) -> str:
 
 
 def save_metadata_info(xml_text: str, blog_name: str) -> None:
-    path_xml_dir = Path("data/datasets") / blog_name
+    path_xml_dir = Path("data/data_lake") / blog_name
     path_xml_dir.mkdir(exist_ok=True, parents=True)
     with open(path_xml_dir / "metadata.xml", "w") as f:
         f.write(xml_text)
