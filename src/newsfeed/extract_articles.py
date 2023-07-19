@@ -1,13 +1,11 @@
+import argparse
 import uuid
 from datetime import datetime
 from pathlib import Path
 
-import jsonargparse
 import pandas as pd
 from bs4 import BeautifulSoup
-from loguru import logger
 
-from newsfeed import log_utils
 from newsfeed.datatypes import BlogInfo
 
 
@@ -57,20 +55,19 @@ def save_articles(articles: list[BlogInfo], blog_name: str) -> None:
 
 
 def main(blog_name: str) -> None:
-    logger.info(f"Processing {blog_name}")
+    print(f"Processing {blog_name}")
     parsed_xml = load_metadata(blog_name)
     articles = extract_articles_from_xml(parsed_xml)
     save_articles(articles, blog_name)
-    logger.info(f"Done processing {blog_name}")
+    print(f"Done processing {blog_name}")
 
 
-def parse_args() -> jsonargparse.Namespace:
-    parser = jsonargparse.ArgumentParser()
-    parser.add_function_arguments(main)
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--blog_name", type=str)
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     args = parse_args()
-    log_utils.configure_logger(log_level="DEBUG")
-    main(**args)
+    main(blog_name=args.blog_name)

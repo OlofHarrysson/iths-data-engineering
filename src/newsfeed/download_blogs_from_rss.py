@@ -1,10 +1,7 @@
+import argparse
 from pathlib import Path
 
-import jsonargparse
 import requests
-from loguru import logger
-
-from newsfeed import log_utils
 
 LINK_TO_XML_FILE = {
     "mit": "https://news.mit.edu/rss/topic/artificial-intelligence2",
@@ -29,19 +26,18 @@ def save_metadata_info(xml_text: str, blog_name: str) -> None:
 
 
 def main(blog_name: str) -> None:
-    logger.info(f"Processing {blog_name}")
+    print(f"Processing {blog_name}")
     xml_text = get_metadata_info(blog_name)
     save_metadata_info(xml_text, blog_name)
-    logger.info(f"Done processing {blog_name}")
+    print(f"Done processing {blog_name}")
 
 
-def parse_args() -> jsonargparse.Namespace:
-    parser = jsonargparse.ArgumentParser()
-    parser.add_function_arguments(main)
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--blog_name", type=str)
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     args = parse_args()
-    log_utils.configure_logger(log_level="DEBUG")
-    main(**args)
+    main(blog_name=args.blog_name)
