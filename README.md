@@ -11,7 +11,7 @@ Once installed, run `python3.10 --version` in your terminal to ensure that it in
 ### Install Make
 Many computers come pre-installed with make. Check if it's installed by running `make --version` in your terminal.
 
-If `make` is not installed, install it.
+If make is not installed, install it.
 
 ### Install Python Packages
 Most of the requirements are installed with the following command
