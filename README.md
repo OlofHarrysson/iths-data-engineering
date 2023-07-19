@@ -17,6 +17,7 @@ Have a look at the [Makefile](Makefile). Think of this file as a collection of s
 
 The Makefile is pretty empty now, but you can add more commands there throughout the project.
 
+You can execute a command by running `make my_command_name` in your terminal.
 ### Install Python Packages
 Most of the requirements are installed with the following command
 ```bash
