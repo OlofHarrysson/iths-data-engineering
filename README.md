@@ -1,32 +1,36 @@
 # ITHS Data Engineering course
-A data engineering project where students get to create a pipeline
+A data engineering project where students get to create a blog summarizing pipeline
+
+**Important**: If you have a Windows computer, you should execute these commands in your linux subsystem.
 ## Get started
-### Install Python and Poetry
-Install the Python version specified in [pyproject.toml](pyproject.toml) to your system.
+### Install Python
+Install the Python 3.10 to your system.
 
-Install Poetry [(Instructions on their website)](https://python-poetry.org/) or run the command
+Once installed, run `python3.10 --version` in your terminal to ensure that it installed properly.
 
-```bash
-curl -sSL https://install.python-poetry.org | python3 -
-```
+### Install Make
+Many computers come pre-installed with make. Check if it's installed by running `make --version` in your terminal.
 
-### Install Requirements
+If `make` is not installed, install it.
+
+### Install Python Packages
 Most of the requirements are installed with the following command
 ```bash
 cd path/to/git-repo
-poetry env use 3.10 # Tells Poetry which Python version to use
 make install_dependencies
+source venv/bin/activate
 ```
 
-### Other Commands
-Other useful commands for the project can be found in the [Makefile](Makefile).
+## Other Commands
+Other useful commands for the project can be found in the [Makefile](Makefile). Think of this file as a collection of shortcuts. They can save time, help you remember and allows your teammates to easily run the same command as you.
+
+Try the `make run_precommit` command
+
+## Tips
+**Important**: All your python code should go inside of the src/newsfeed folder. This makes it so that you can "build" your own python package easily and not have problems with the PYTHONPATH i.e. not being able to import code from other files.
 
 
-### Tips
-All your python code should go inside of the src/newsfeed folder. This makes it so that you can "build" your own python package easily.
-
-
-### Pull Request Practice
+## Pull Request Practice
 
 🐰 The Adventures of Benny Bunny 🐰
 Once upon a time, in a lush meadow, lived Benny Bunny. One sunny day, Benny hopped through the tall grass and discovered a hidden carrot patch. Excitedly, he nibbled on the juiciest carrot he could find. But little did Benny know, the carrot patch belonged to Farmer Fred! Will Benny be able to outsmart the farmer and enjoy his delicious carrots? Join Benny Bunny on his thrilling adventure!
