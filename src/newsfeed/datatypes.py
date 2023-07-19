@@ -1,14 +1,16 @@
-from datetime import date
+from datetime import date, datetime
 
 import pydantic
 
 
 class BlogInfo(pydantic.BaseModel):
+    id: str
     title: str
     description: str
     link: str
-    published: date
     blog_text: str
+    published: date
+    timestamp: datetime
 
     class Config:
         frozen = True
