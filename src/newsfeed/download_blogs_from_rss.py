@@ -8,7 +8,7 @@ LINK_TO_XML_FILE = {
 }
 
 
-def get_metadata_info(blog_name: str) -> str:
+def get_metadata_info(blog_name):
     assert (
         blog_name in LINK_TO_XML_FILE
     ), f"{blog_name=} not supported. Supported blogs: {list(LINK_TO_XML_FILE)}"
@@ -18,21 +18,21 @@ def get_metadata_info(blog_name: str) -> str:
     return xml_text
 
 
-def save_metadata_info(xml_text: str, blog_name: str) -> None:
+def save_metadata_info(xml_text, blog_name):
     path_xml_dir = Path("data/data_lake") / blog_name
     path_xml_dir.mkdir(exist_ok=True, parents=True)
     with open(path_xml_dir / "metadata.xml", "w") as f:
         f.write(xml_text)
 
 
-def main(blog_name: str) -> None:
+def main(blog_name):
     print(f"Processing {blog_name}")
     xml_text = get_metadata_info(blog_name)
     save_metadata_info(xml_text, blog_name)
     print(f"Done processing {blog_name}")
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--blog_name", type=str)
     return parser.parse_args()
