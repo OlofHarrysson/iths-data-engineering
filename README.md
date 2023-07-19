@@ -13,6 +13,10 @@ Many computers come pre-installed with make. Check if it's installed by running 
 
 If make is not installed, install it.
 
+Have a look at the [Makefile](Makefile). Think of this file as a collection of shortcuts. They can save you time, help you remember complicated commands and allows your teammates to easily run the same command as you.
+
+The Makefile is pretty empty now, but you can add more commands there throughout the project.
+
 ### Install Python Packages
 Most of the requirements are installed with the following command
 ```bash
@@ -20,11 +24,6 @@ cd path/to/git-repo
 make install_dependencies
 source venv/bin/activate
 ```
-
-## Other Commands
-Other useful commands for the project can be found in the [Makefile](Makefile). Think of this file as a collection of shortcuts. They can save time, help you remember and allows your teammates to easily run the same command as you.
-
-Try the `make run_precommit` command
 
 ## Tips
 **Important**: All your python code should go inside of the src/newsfeed folder. This makes it so that you can "build" your own python package easily and not have problems with the PYTHONPATH i.e. not being able to import code from other files.
