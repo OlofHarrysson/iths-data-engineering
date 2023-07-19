@@ -3,6 +3,8 @@ from datetime import date, datetime
 import pydantic
 
 
+# Note: The code below uses Python type hints to clarify the variable types.
+# More info: https://realpython.com/lessons/type-hinting/
 class BlogInfo(pydantic.BaseModel):
     unique_id: str
     title: str
@@ -12,6 +14,6 @@ class BlogInfo(pydantic.BaseModel):
     published: date
     timestamp: datetime
 
-    @property
-    def filename(self) -> str:
-        return f'{self.title.replace(" ", "_")}.json'
+    def get_filename(self):
+        filename = f'{self.title.replace(" ", "_")}.json'
+        return filename
