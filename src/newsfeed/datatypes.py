@@ -4,7 +4,7 @@ import pydantic
 
 
 class BlogInfo(pydantic.BaseModel):
-    id: str
+    unique_id: str
     title: str
     description: str
     link: str
@@ -12,15 +12,13 @@ class BlogInfo(pydantic.BaseModel):
     published: date
     timestamp: datetime
 
-    class Config:
-        frozen = True
-
     @property
     def filename(self) -> str:
         return f'{self.title.replace(" ", "_")}.json'
 
 
 class BlogSummary(pydantic.BaseModel):
+    unique_id: str  # This should be the same as for BlogInfo so that they can be linked
     title: str
     text: str
 

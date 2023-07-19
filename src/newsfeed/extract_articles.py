@@ -34,7 +34,7 @@ def extract_articles_from_xml(parsed_xml: BeautifulSoup) -> list[BlogInfo]:
         title = item.title.text
         unique_id = create_uuid_from_string(title)
         article_info = BlogInfo(
-            id=unique_id,
+            unique_id=unique_id,
             title=title,
             description=item.description.text,
             link=item.link.text,
